@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Love Game Untuk Vista ❤️</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body{
+    background: linear-gradient(135deg,#ff9a9e,#fad0c4);
+    height:100vh;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.game-container{
+    width:400px;
+    height:650px;
+    background:white;
+    border-radius:25px;
+    position:relative;
+    overflow:hidden;
+    box-shadow:0 15px 35px rgba(0,0,0,0.25);
+}
+
+.header{
+    background:#ff4d6d;
+    color:white;
+    text-align:center;
+    padding:15px;
+}
+
+.score{
+    font-size:20px;
+    font-weight:bold;
+}
+
+#player{
+    position:absolute;
+    bottom:20px;
+    left:170px;
+    font-size:45px;
+    transition:0.1s;
+}
+
+.heart{
+    position:absolute;
+    font-size:30px;
+    animation:fall linear forwards;
+}
+
+@keyframes fall{
+    from{
+        top:-50px;
+    }
+    to{
+        top:700px;
+    }
+}
+
+.message{
+    position:absolute;
+    inset:0;
+    background:rgba(255,77,109,0.95);
+    color:white;
+    display:none;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:30px;
+    flex-direction:column;
+}
+
+.message h2{
+    margin-bottom:15px;
+}
+
+button{
+    margin-top:20px;
+    padding:12px 20px;
+    border:none;
+    border-radius:30px;
+    background:white;
+    color:#ff4d6d;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.controls{
+    position:absolute;
+    bottom:5px;
+    width:100%;
+    display:flex;
+    justify-content:space-between;
+    padding:0 25px;
+}
+
+.ctrl{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    font-size:25px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="game-container">
+
+    <div class="header">
+        <h2>❤️ Love Quest for Vista ❤️</h2>
+        <div class="score">Love Points: <span id="score">0</span>/20</div>
+    </div>
+
+    <div id="player">🥰</div>
+
+    <div class="controls">
+        <button class="ctrl" onclick="moveLeft()">⬅️</button>
+        <button class="ctrl" onclick="moveRight()">➡️</button>
+    </div>
+
+    <div class="message" id="winMessage">
+        <h2>Untuk Vista ❤️</h2>
+
+        <p>
+        Selamat sayang...<br><br>
+
+        Kamu berhasil mengumpulkan semua hati yang ada di game ini,
+        sama seperti kamu yang sudah mau berjuang merebut hatiku.
+        <br><br>
+
+        Terima kasih sudah hadir dalam hidupku.
+        Semoga kita selalu bersama,
+        saling mendukung, saling menjaga,
+        dan saling mencintai setiap hari.
+        <br><br>
+
+        ❤️ I Love You Vista ❤️
+        </p>
+
+        <button onclick="location.reload()">
+            Main Lagi
+        </button>
+    </div>
+
+</div>
+
+<script>
+const player = document.getElementById("player");
+const scoreEl = document.getElementById("score");
+const winMessage = document.getElementById("winMessage");
+
+let playerX = 170;
+let score = 0;
+
+function moveLeft(){
+    playerX -= 25;
+    if(playerX < 0) playerX = 0;
+    player.style.left = playerX + "px";
+}
+
+function moveRight(){
+    playerX += 25;
+    if(playerX > 340) playerX = 340;
+    player.style.left = playerX + "px";
+}
+
+document.addEventListener("keydown",(e)=>{
+    if(e.key==="ArrowLeft") moveLeft();
+    if(e.key==="ArrowRight") moveRight();
+});
+
+function createHeart(){
+
+    const heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML="❤️";
+
+    const x = Math.random()*350;
+    const speed = Math.random()*3 + 3;
+
+    heart.style.left = x + "px";
+    heart.style.animationDuration = speed + "s";
+
+    document.querySelector(".game-container").appendChild(heart);
+
+    const check = setInterval(()=>{
+
+        const heartRect = heart.getBoundingClientRect();
+        const playerRect = player.getBoundingClientRect();
+
+        if(
+            heartRect.left < playerRect.right &&
+            heartRect.right > playerRect.left &&
+            heartRect.top < playerRect.bottom &&
+            heartRect.bottom > playerRect.top
+        ){
+            score++;
+            scoreEl.textContent = score;
+            heart.remove();
+            clearInterval(check);
+
+            if(score >= 20){
+                winMessage.style.display="flex";
+            }
+        }
+
+        if(!document.body.contains(heart)){
+            clearInterval(check);
+        }
+
+    },30);
+
+    setTimeout(()=>{
+        if(document.body.contains(heart)){
+            heart.remove();
+        }
+    }, speed*1000);
+
+}
+
+setInterval(createHeart,700);
+</script>
+
+</body>
+</html>
